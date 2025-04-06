@@ -2,9 +2,14 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Movements } from './movements/movements.entity';
-import { FilesModule } from './files/files.module';
+// import { FilesModule } from './files/files.module';
 import { MovementsModule } from './movements/movements.module';
-import { CategoriesModule } from './concepts/categories.module';
+import { CategoriesModule } from './categories/categories.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { Users } from './users/users.entity';
+import { AccountsModule } from './accounts/accounts.module';
+import { Accounts } from './accounts/accounts.entity';
 
 @Module({
   imports: [
@@ -19,13 +24,16 @@ import { CategoriesModule } from './concepts/categories.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [Movements],
+        entities: [Movements, Users, Accounts],
         synchronize: true,
       }),
     }),
-    FilesModule,
+    // FilesModule,
     MovementsModule,
     CategoriesModule,
+    AuthModule,
+    UsersModule,
+    AccountsModule,
   ],
 })
 export class AppModule {}

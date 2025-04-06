@@ -1,8 +1,8 @@
 import OpenAI from 'openai';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { Injectable } from '@nestjs/common';
-import { Movement } from 'src/movements/movement.interface';
-import { Categories } from './category.interface';
+import { Movements } from 'src/movements/movements.interface';
+import { Categories } from './categories.interface';
 import { itemSchema } from './category.schema';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class CategoriesService {
     });
   }
 
-  async getCategory(movement: Partial<Movement>): Promise<Partial<Movement>> {
+  async getCategory(movement: Partial<Movements>): Promise<Partial<Movements>> {
     const movementDescriptions = `${movement.description} ${movement.amount}`;
 
     const response = await this.openai.chat.completions.create({

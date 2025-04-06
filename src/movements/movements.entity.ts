@@ -1,4 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Users } from 'src/users/users.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { MovementsType } from './movements.interface';
+import { Accounts } from 'src/accounts/accounts.entity';
 
 @Entity()
 export class Movements {
@@ -8,7 +11,10 @@ export class Movements {
   @Column()
   externalId: string;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: MovementsType,
+  })
   type: string;
 
   @Column()
@@ -24,4 +30,10 @@ export class Movements {
 
   @Column()
   createdAt: string;
+
+  @ManyToOne(() => Users, (user) => user.movements)
+  user: Users;
+
+  @ManyToOne(() => Accounts, (account) => account.movements)
+  account: Accounts;
 }
