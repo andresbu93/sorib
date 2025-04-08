@@ -7,6 +7,7 @@ export enum MovementsType {
 }
 
 export interface Movements {
+  id: number;
   externalId: string;
   type: MovementsType;
   description: string;

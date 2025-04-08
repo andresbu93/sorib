@@ -1,7 +1,10 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
   Param,
+  Patch,
   Post,
   Request,
   UseGuards,
@@ -26,7 +29,21 @@ export class AccountsController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  async getById(@Param('id') id: number) {
-    return await this.accountsService.findById(Number(id));
+  getById(@Param('id') id: number) {
+    return this.accountsService.findById(Number(id));
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id')
+  async update(@Param('id') id: number, @Body() body) {
+    const account = body as unknown as Accounts;
+    account.id = Number(id);
+    return await this.accountsService.update(account);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  delete(@Param('id') id: number) {
+    return this.accountsService.delete(id);
   }
 }

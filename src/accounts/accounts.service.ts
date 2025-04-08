@@ -20,7 +20,17 @@ export class AccountsService {
     return await this.accountsRepository.save(accountToSave);
   }
 
-  update(account: AccountsEntity) {
-    return this.accountsRepository.save(account);
+  async update(account: Partial<Accounts>) {
+    const accountToUpdate = await this.accountsRepository.findOne({
+      where: { id: account.id },
+    });
+    return await this.accountsRepository.update(account.id, {
+      ...accountToUpdate,
+      ...account,
+    });
+  }
+
+  async delete(id: number) {
+    return this.accountsRepository.softDelete({ id });
   }
 }

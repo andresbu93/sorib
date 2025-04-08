@@ -1,6 +1,14 @@
 import { Accounts } from 'src/accounts/accounts.entity';
 import { Movements } from 'src/movements/movements.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  CreateDateColumn,
+  DeleteDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class Users {
@@ -18,4 +26,13 @@ export class Users {
 
   @OneToMany(() => Accounts, (account) => account.user)
   accounts: Accounts[];
+
+  @DeleteDateColumn()
+  deletedAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @CreateDateColumn()
+  createdAt: Date;
 }

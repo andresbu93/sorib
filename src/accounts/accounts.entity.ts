@@ -6,6 +6,8 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToOne,
+  DeleteDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -24,6 +26,12 @@ export class Accounts {
 
   @Column()
   currencyCode: string;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @ManyToOne(() => Users, (user) => user.accounts)
   user: Users;

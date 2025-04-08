@@ -1,5 +1,12 @@
 import { Users } from 'src/users/users.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  UpdateDateColumn,
+  DeleteDateColumn,
+} from 'typeorm';
 import { MovementsType } from './movements.interface';
 import { Accounts } from 'src/accounts/accounts.entity';
 
@@ -7,9 +14,6 @@ import { Accounts } from 'src/accounts/accounts.entity';
 export class Movements {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column()
-  externalId: string;
 
   @Column({
     type: 'enum',
@@ -28,8 +32,11 @@ export class Movements {
   @Column({ type: 'decimal', precision: 18, scale: 6 })
   amount: string;
 
-  @Column()
-  createdAt: string;
+  @DeleteDateColumn()
+  deletedAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @ManyToOne(() => Users, (user) => user.movements)
   user: Users;
