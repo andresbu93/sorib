@@ -46,18 +46,6 @@ export class MovementsService {
     await this.movementsRepository.save(movementToSave);
   }
 
-  // remove ??
-  async createMany(movements: Movements[]): Promise<Movements[]> {
-    const movementsToSave = this.movementsRepository.create(movements);
-    return await this.movementsRepository.save(movementsToSave);
-  }
-
-  // remove ??
-  async findByExternalId(externalId: string): Promise<boolean> {
-    const movement = await this.movementsRepository.findOneBy({ externalId });
-    return movement ? true : false;
-  }
-
   async update(movement: Movements) {
     movement.amount = this.getAmount(movement.amount, movement.type);
     const movementToUpdate = await this.movementsRepository.findOneBy({

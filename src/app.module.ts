@@ -10,6 +10,7 @@ import { UsersModule } from './users/users.module';
 import { Users } from './users/users.entity';
 import { AccountsModule } from './accounts/accounts.module';
 import { Accounts } from './accounts/accounts.entity';
+import { Categories } from './categories/categories.entity';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { Accounts } from './accounts/accounts.entity';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [Movements, Users, Accounts],
+        entities: [Movements, Users, Accounts, Categories],
         synchronize: true,
       }),
     }),

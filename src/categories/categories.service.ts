@@ -1,40 +1,36 @@
-import OpenAI from 'openai';
-import { zodResponseFormat } from 'openai/helpers/zod';
 import { Injectable } from '@nestjs/common';
-import { Movements } from 'src/movements/movements.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Categories as CategoriesEntity } from './categories.entity';
+import { Repository } from 'typeorm';
 import { Categories } from './categories.interface';
-import { itemSchema } from './category.schema';
 
 @Injectable()
 export class CategoriesService {
-  private openai: OpenAI;
+  constructor(
+    @InjectRepository(CategoriesEntity)
+    private readonly categoriesRepository: Repository<CategoriesEntity>,
+  ) {}
 
-  constructor() {
-    this.openai = new OpenAI({
-      apiKey:
-        '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',
+  findAll() {
+    return this.categoriesRepository.find();
+  }
+
+  async create(category: Categories) {
+    const categoryToSave = this.categoriesRepository.create(category);
+    return await this.categoriesRepository.save(categoryToSave);
+  }
+
+  async update(category: Categories) {
+    const categoryToUpdate = await this.categoriesRepository.findOneBy({
+      id: category.id,
+    });
+    return await this.categoriesRepository.update(category.id, {
+      ...categoryToUpdate,
+      ...category,
     });
   }
 
-  async getCategory(movement: Partial<Movements>): Promise<Partial<Movements>> {
-    const movementDescriptions = `${movement.description} ${movement.amount}`;
-
-    const response = await this.openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [
-        {
-          role: 'developer',
-          content:
-            'You are a helpful assistant that categorizes transactions into categories based on their description.',
-        },
-        {
-          role: 'user',
-          content: `I have a list of transactions with their description amount and his external id. Please categorize each transaction based on its description. The categories are: ${Object.values(Categories)}. Here is the list of transactions: ${movementDescriptions}`,
-        },
-      ],
-      response_format: zodResponseFormat(itemSchema, 'category_response'),
-    });
-    console.info(response.choices[0].message.content);
-    return JSON.parse(response.choices[0].message.content);
+  remove(id: number) {
+    return this.categoriesRepository.delete({ id });
   }
 }
