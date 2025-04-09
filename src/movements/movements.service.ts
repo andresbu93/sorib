@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Movements as MovementsEntity } from './movements.entity';
-import { Movements } from './movements.interface';
+import { Movements, MovementsType } from './movements.interface';
 import { AccountsService } from 'src/accounts/accounts.service';
 import { Accounts } from 'src/accounts/accounts.interface';
 
@@ -15,7 +15,17 @@ export class MovementsService {
     private readonly accountsService: AccountsService,
   ) {}
 
+  private getAmount(amount: string, type: string) {
+    switch (type) {
+      case MovementsType.INCOMING:
+        return amount;
+      case MovementsType.OUTGOING:
+        return `-${amount}`;
+    }
+  }
+
   async createOne(movement: Movements) {
+    movement.amount = this.getAmount(movement.amount, movement.type);
     const movementToSave = this.movementsRepository.create(movement);
 
     const account = (await this.accountsService.findById(
@@ -49,6 +59,7 @@ export class MovementsService {
   }
 
   async update(movement: Movements) {
+    movement.amount = this.getAmount(movement.amount, movement.type);
     const movementToUpdate = await this.movementsRepository.findOneBy({
       id: movement.id,
     });
