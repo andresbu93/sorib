@@ -8,6 +8,7 @@ import {
   ManyToOne,
   DeleteDateColumn,
   UpdateDateColumn,
+  CreateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -32,6 +33,9 @@ export class Accounts {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   @ManyToOne(() => Users, (user) => user.accounts)
   user: Users;

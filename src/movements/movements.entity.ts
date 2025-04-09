@@ -6,6 +6,7 @@ import {
   ManyToOne,
   UpdateDateColumn,
   DeleteDateColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import { MovementsType } from './movements.interface';
 import { Accounts } from 'src/accounts/accounts.entity';
@@ -37,6 +38,9 @@ export class Movements {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   @ManyToOne(() => Users, (user) => user.movements)
   user: Users;
