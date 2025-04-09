@@ -43,7 +43,7 @@ export class MovementsService {
       ),
     });
 
-    await this.movementsRepository.save(movementToSave);
+    return await this.movementsRepository.save(movementToSave);
   }
 
   async update(movement: Movements) {

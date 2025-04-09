@@ -11,6 +11,8 @@ import { Users } from './users/users.entity';
 import { AccountsModule } from './accounts/accounts.module';
 import { Accounts } from './accounts/accounts.entity';
 import { Categories } from './categories/categories.entity';
+import { CurrenciesModule } from './currencies/currencies.module';
+import { Currencies } from './currencies/currencies.entity';
 
 @Module({
   imports: [
@@ -25,7 +27,7 @@ import { Categories } from './categories/categories.entity';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [Movements, Users, Accounts, Categories],
+        entities: [Movements, Users, Accounts, Categories, Currencies],
         synchronize: true,
       }),
     }),
@@ -35,6 +37,7 @@ import { Categories } from './categories/categories.entity';
     AuthModule,
     UsersModule,
     AccountsModule,
+    CurrenciesModule,
   ],
 })
 export class AppModule {}

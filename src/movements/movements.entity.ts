@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { MovementsType } from './movements.interface';
 import { Accounts } from 'src/accounts/accounts.entity';
+import { Currencies } from 'src/currencies/currencies.entity';
 
 @Entity()
 export class Movements {
@@ -47,4 +48,7 @@ export class Movements {
 
   @ManyToOne(() => Accounts, (account) => account.movements)
   account: Accounts;
+
+  @ManyToOne(() => Currencies, (currency) => currency.movements)
+  currency: Currencies;
 }

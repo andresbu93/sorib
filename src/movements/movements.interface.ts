@@ -1,4 +1,5 @@
 import { Accounts } from 'src/accounts/accounts.interface';
+import { Currencies } from 'src/currencies/currencies.interface';
 import { Users } from 'src/users/users.interface';
 
 export enum MovementsType {
@@ -15,4 +16,5 @@ export interface Movements {
   amount: string;
   user: Partial<Users>;
   account: Partial<Accounts>;
+  currency: Currencies;
 }

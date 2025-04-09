@@ -23,9 +23,6 @@ export class MovementsController {
     movement.user = {
       id: req.user.userId,
     };
-    movement.account = {
-      id: req.body.accountId,
-    };
     return this.movementsService.createOne(movement);
   }
 

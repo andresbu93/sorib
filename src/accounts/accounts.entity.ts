@@ -1,3 +1,4 @@
+import { Currencies } from 'src/currencies/currencies.entity';
 import { Movements } from 'src/movements/movements.entity';
 import { Users } from 'src/users/users.entity';
 import {
@@ -25,9 +26,6 @@ export class Accounts {
   @Column()
   description: string;
 
-  @Column()
-  currencyCode: string;
-
   @DeleteDateColumn()
   deletedAt: Date;
 
@@ -42,4 +40,7 @@ export class Accounts {
 
   @OneToMany(() => Movements, (movement) => movement.account)
   movements: Movements[];
+
+  @ManyToOne(() => Currencies, (currency) => currency.accounts)
+  currency: Currencies;
 }
