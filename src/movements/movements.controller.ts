@@ -10,23 +10,21 @@ import {
 } from '@nestjs/common';
 import { MovementsService } from './movements.service';
 import { Movements } from './movements.interface';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { CustomAuthGuard } from 'src/auth/custom-auth.guard';
 
 @Controller('movements')
 export class MovementsController {
   constructor(private readonly movementsService: MovementsService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(CustomAuthGuard)
   @Post()
   createOne(@Request() req) {
     const movement = req.body as unknown as Movements;
-    movement.user = {
-      id: req.user.userId,
-    };
+    movement.userId = req.user.userId;
     return this.movementsService.createOne(movement);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(CustomAuthGuard)
   @Patch(':id')
   update(@Param('id') id: number, @Body() movement) {
     return this.movementsService.update({
@@ -35,7 +33,7 @@ export class MovementsController {
     });
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(CustomAuthGuard)
   @Delete(':id')
   delete(@Param('id') id: number) {
     return this.movementsService.delete(id);

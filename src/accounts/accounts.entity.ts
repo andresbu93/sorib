@@ -1,6 +1,5 @@
 import { Currencies } from 'src/currencies/currencies.entity';
 import { Movements } from 'src/movements/movements.entity';
-import { Users } from 'src/users/users.entity';
 import {
   Entity,
   Column,
@@ -35,8 +34,8 @@ export class Accounts {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => Users, (user) => user.accounts)
-  user: Users;
+  @Column({ nullable: true })
+  userId: string;
 
   @OneToMany(() => Movements, (movement) => movement.account)
   movements: Movements[];

@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Movements } from 'src/movements/movements.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class Categories {
@@ -7,4 +8,7 @@ export class Categories {
 
   @Column()
   name: string;
+
+  @OneToMany(() => Movements, (movement) => movement.category)
+  movements: Movements[];
 }

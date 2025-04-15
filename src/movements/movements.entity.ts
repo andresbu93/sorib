@@ -1,4 +1,3 @@
-import { Users } from 'src/users/users.entity';
 import {
   Entity,
   Column,
@@ -11,6 +10,7 @@ import {
 import { MovementsType } from './movements.interface';
 import { Accounts } from 'src/accounts/accounts.entity';
 import { Currencies } from 'src/currencies/currencies.entity';
+import { Categories } from 'src/categories/categories.entity';
 
 @Entity()
 export class Movements {
@@ -26,11 +26,6 @@ export class Movements {
   @Column()
   description: string;
 
-  @Column({
-    nullable: true,
-  })
-  category: string;
-
   @Column({ type: 'decimal', precision: 18, scale: 6 })
   amount: string;
 
@@ -43,12 +38,15 @@ export class Movements {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => Users, (user) => user.movements)
-  user: Users;
+  @Column({ nullable: true })
+  userId: string;
 
   @ManyToOne(() => Accounts, (account) => account.movements)
   account: Accounts;
 
   @ManyToOne(() => Currencies, (currency) => currency.movements)
   currency: Currencies;
+
+  @ManyToOne(() => Categories, (category) => category.movements)
+  category: Categories;
 }
