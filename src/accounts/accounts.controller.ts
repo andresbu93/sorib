@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
-import { Accounts } from './accounts.interface';
+import { Accounts, Transfer } from './accounts.interface';
 import { CustomAuthGuard } from 'src/auth/custom-auth.guard';
 
 @Controller('accounts')
@@ -44,5 +44,13 @@ export class AccountsController {
   @Delete(':id')
   delete(@Param('id') id: number) {
     return this.accountsService.delete(id);
+  }
+
+  @UseGuards(CustomAuthGuard)
+  @Post('/transfers')
+  async transfer(@Request() req) {
+    const body = req.body as unknown as Transfer;
+    body.userId = req.user.userId;
+    return await this.accountsService.transfer(body);
   }
 }

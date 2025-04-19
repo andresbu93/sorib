@@ -1,18 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Movements as MovementsEntity } from './movements.entity';
 import { Movements, MovementsType } from './movements.interface';
 import { AccountsService } from 'src/accounts/accounts.service';
-import { Accounts } from 'src/accounts/accounts.interface';
 
 @Injectable()
 export class MovementsService {
   constructor(
+    @Inject(forwardRef(() => AccountsService))
+    private readonly accountsService: AccountsService,
+
     @InjectRepository(MovementsEntity)
     private readonly movementsRepository: Repository<Movements>,
-
-    private readonly accountsService: AccountsService,
   ) {}
 
   private getAmount(amount: string, type: string) {
@@ -20,34 +20,33 @@ export class MovementsService {
       case MovementsType.INCOMING:
         return amount;
       case MovementsType.OUTGOING:
-        return `-${amount}`;
+        return `${Number(amount) * -1}`;
     }
   }
 
   async createOne(movement: Movements) {
     movement.amount = this.getAmount(movement.amount, movement.type);
+
+    await this.accountsService.updateBalance(
+      movement.account.id,
+      Number(movement.amount),
+    );
+
     const movementToSave = this.movementsRepository.create(movement);
-
-    const account = (await this.accountsService.findById(
-      movementToSave.account.id,
-    )) as unknown as Accounts;
-
-    if (!account) {
-      throw new Error('Account not found');
-    }
-
-    await this.accountsService.update({
-      ...account,
-      availableBalance: String(
-        Number(account.availableBalance) + Number(movement.amount),
-      ),
-    });
-
     return await this.movementsRepository.save(movementToSave);
   }
 
   async update(movement: Movements) {
+    console.log(movement);
     movement.amount = this.getAmount(movement.amount, movement.type);
+
+    console.log(movement.amount);
+
+    await this.accountsService.updateBalance(
+      movement.account.id,
+      Number(movement.amount),
+    );
+
     const movementToUpdate = await this.movementsRepository.findOneBy({
       id: movement.id,
     });

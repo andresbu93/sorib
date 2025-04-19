@@ -18,10 +18,10 @@ export class UsersService {
       description: filter.description,
       userId: filter.userId,
       account: {
-        id: filter.accountId
+        id: filter.accountId,
       },
       category: {
-        id: filter.categoryId
+        id: filter.categoryId,
       },
       type: filter.type,
       amount: filter.amount,
@@ -34,7 +34,7 @@ export class UsersService {
     if (filter.toDate) {
       whereClause.createdAt = LessThanOrEqual(filter.toDate);
     }
-    
+
     if (filter.fromDate && filter.toDate) {
       whereClause.createdAt = Between(filter.fromDate, filter.toDate);
     }
@@ -44,7 +44,7 @@ export class UsersService {
       take: Number(page.size),
       where: whereClause,
       relations: {
-        category: true
+        category: true,
       },
     });
   }
@@ -53,6 +53,9 @@ export class UsersService {
     return this.accountsRepository.find({
       where: {
         userId,
+      },
+      relations: {
+        currency: true,
       },
     });
   }
